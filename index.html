@@ -780,16 +780,14 @@ body:not(.gis) .stlbl,body:not(.gis) .plbl{display:none}
   <div class="chips" role="group" aria-label="Map view">
     <button class="chip on" id="satBtn">SATELLITE</button>
     <button class="chip" id="gisBtn">GIS</button>
-    <button class="chip count" id="rosterBtn">WHO'S IN &middot; <span id="nIn">0</span></button>
+    <button class="chip count" id="rosterBtn">HOUSES SO FAR &middot; <span id="nIn">0</span></button>
   </div>
 </header>
 
 <div id="map"></div>
 
 <nav id="roster" aria-label="Houses on the map">
-  <h2>FLAGS ON THE BLOCK</h2>
   <div id="rows"></div>
-  <div class="roster-note" id="griffinNote"></div>
 </nav>
 
 <div id="attr">Imagery &copy; Esri &middot; Maxar, Earthstar Geographics &nbsp;&middot;&nbsp; Parcels &amp; addresses &copy; NJGIN / Monmouth County GIS</div>
@@ -937,7 +935,7 @@ gisBtn.onclick=()=>setView("gis");
 /* ---------- roster ---------- */
 const rosterEl=document.getElementById("roster"), rosterBtn=document.getElementById("rosterBtn");
 const mains = DATA.entries;
-document.getElementById("nIn").textContent = DATA.entries.filter(e=>!e.norow).length + 1; // + the one address-pending sign-up
+document.getElementById("nIn").textContent = DATA.entries.length; // houses with flags
 const rowsEl=document.getElementById("rows");
 DATA.entries.forEach(e=>{
   if(e.norow) return;
@@ -952,12 +950,6 @@ DATA.entries.forEach(e=>{
   d.onkeydown=ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();go();}};
   rowsEl.appendChild(d);
 });
-const g=document.createElement("div");
-g.className="row gone";
-g.innerHTML='<div class="fl"><svg width="20" height="18" viewBox="0 0 20 18"><line x1="3" y1="2" x2="3" y2="17" stroke="#F2EEE3" stroke-width="1.6" stroke-linecap="round" opacity=".7"/><circle cx="3" cy="1.8" r="1.4" fill="#E8B23A" opacity=".7"/><path d="M4.5 3 L15 3 L15 10 L4.5 10 Z" fill="none" stroke="rgba(242,238,227,.5)" stroke-dasharray="2 2"/></svg></div>'
-  +'<div class="nm"><b>No address yet</b><span>country TBD</span></div>';
-rowsEl.appendChild(g);
-document.getElementById("griffinNote").textContent = "Tap an address to jump to the house. Send new sign-ups and they get a flag.";
 function toggleRoster(force){
   const open = force!==undefined?force:!rosterEl.classList.contains("open");
   rosterEl.classList.toggle("open",open);
